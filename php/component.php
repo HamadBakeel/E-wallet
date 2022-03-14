@@ -38,7 +38,7 @@
     function cartProuct($productImage, $productName, $productPrice, $productid){
         $element = "
         
-        <form action=\"cart.php?action=remove&id=$productid\" method=\"post\" class=\"cart-items\">
+        <form action=\"cart.php\" method=\"post\" class=\"cart-items\">
                         <div class=\"border rounded p-3 mb-2\">
                             <div class=\"row bg-white\">
                                 <div class=\"col-md-3 \">
@@ -54,6 +54,7 @@
                                 <div class=\"col-md-3 py-5\">
                                     <button class=\"bg-light btn border rounded-circle\"><i class=\"fa-solid fa-minus\"></i></button>
                                     <input type=\"text\" value=\"1\" class=\"form-control w-25 px-2 d-inline\">
+                                    <input type=\"hidden\" value=\"$productid\" name =\"productid\" class=\"form-control w-25 px-2 d-inline\">
                                     <button class=\"bg-light btn border rounded-circle\"><i class=\"fa-solid fa-plus\"></i></button>
                                 </div>
                             </div>

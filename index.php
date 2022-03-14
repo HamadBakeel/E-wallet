@@ -56,10 +56,10 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
     <h2>Balance: <?php echo "$".$balance ?></h2>
     <div class = "mt-4">
         <button type="button" class="btn btn-primary depositionButton" style="width: fit-content" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Deposit
+            Deposit <i class="fa-solid fa-circle-dollar-to-slot"></i>
         </button>
         <button type="button" class="btn btn-warning withdrawButton" style="width: fit-content" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Withdraw
+            Withdraw <i class="fa-solid fa-hand-holding-dollar"></i>
         </button>
     </div>
     <div class="mt-4 d-flex flex-column gap-3 ">

@@ -3,19 +3,36 @@
 
     require_once 'component.php';
     require_once 'createDB.php';
-    // require_once '../DBconnection.php';
-    // session_start();
+    require_once '../DBconnection.php';
+    
     $balance = $_SESSION['balance'];
+    $paymentError = false ;
     $db = new CreateDB('ProductDB','producttb');
 
     if(isset($_POST['remove'])){
-        if($_GET['action']== 'remove'){
             foreach($_SESSION['cart'] as $key => $value):
-                if($value['product_id']== $_GET['id'])
+                if($value['product_id']== $_POST['productid'])
                 unset($_SESSION['cart'][$key]);
             endforeach;
+    }
+    if(isset($_POST['pay'])){
+        $total = $_SESSION['total'];
+        if($total > $balance){
+            $paymentError = true;
+        }else{
+            $withdrawalAmount = $balance - $total;
+            $id = $_SESSION['id'];
+            $sql = "UPDATE wallets SET balance =$withdrawalAmount WHERE user_id = $id";
+            foreach($_SESSION['cart'] as $key => $value):
+                unset($_SESSION['cart'][$key]);
+            endforeach;
+            if(!mysqli_query($conn,$sql)){
+                echo "Failed To Withdraw: ".mysqli_error();
+            }
+            echo "<script>window.location = '../shop.php'</script>";
         }
     }
+    
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +64,7 @@
                                     if($product['id'] == $id){
                                         cartProuct($product['product_image'],$product['product_name'],$product['product_price'],$product['id']);
                                         $total += (int)$product['product_price'];
+                                        $_SESSION['total'] = $total;
                                     }
                                 endforeach;
                             }
@@ -70,13 +88,28 @@
                             ?>
                             <h6>Delivery Charges</h6>
                             <hr>
-                            <h6>Amount Payable</h6>
+                            <h6>Payable Amount</h6>
                         </div>
                         <div class="col-md-6">
                             <h6 class="mb-0"><?php echo "$$total";?></h6>
                             <h6 class="mb-0 pb-0 text-success">FREE</h6>
                             <hr>
                             <h6 class="mb-0"><?php echo "$$balance";?></h6>
+                        </div>
+                        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center w-100">
+                            <?php if($paymentError){
+                                echo "
+                                <div class=\"alert alert-danger d-flex align-items-center\" role=\"alert\">
+                                    <svg class=\"bi flex-shrink-0 me-2\" width=\"24\" height=\"24\" role=\"img\" aria-label=\"Danger:\"><use xlink:href=\"#exclamation-triangle-fill\"/></svg>
+                                    <div>
+                                        Invalid operation: Not Enough Balance
+                                    </div>
+                                </div></br>";
+                            }
+                            ?>
+                            <form action="cart.php" method="post">
+                                <button class="btn rounded-pill px-4 fw-bold my-2 btn-success" name="pay" type="submit">Pay <i class="fa-solid fa-hand-holding-dollar"></i></button>
+                            </form>
                         </div>
                     </div>
                 </div>
