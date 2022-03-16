@@ -2,16 +2,16 @@
     require_once('php/component.php');
     require_once('php/createDB.php');
 
+    session_start();
+if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
+
     // create instance of CreateDB class
     $database = new CreateDB("ProductDB","producttb");
 
-    session_start();
 
     if(isset($_POST['add'])){
         if(isset($_SESSION['cart'])){
             $item_array_id = array_column($_SESSION['cart'],"product_id");
-            // print_r($item_array_id);
-
             if(in_array($_POST['product_id'],$item_array_id)){
                 echo "<script>alert('This item has already been added to the cart')</script>";
                 echo "<script>window.location = 'shop.php'</script>";
@@ -19,7 +19,6 @@
                 $count = count($_SESSION['cart']);
                 $item_array = array('product_id' => $_POST['product_id']);
                 $_SESSION['cart'][$count] = $item_array;
-                // print_r($_SESSION['cart']);
             }
 
         }else{
@@ -28,7 +27,6 @@
             $_SESSION['cart'][0]=$item_array;
         }
     }
-    // session_destroy();
 ?>
 
 <!DOCTYPE html>
@@ -57,3 +55,9 @@
     <script src="assets/bootstrap.bundle.js"></script>
 </body>
 </html>
+<?php
+}else{
+    header("Location: login.php");
+    exit();
+}
+?>

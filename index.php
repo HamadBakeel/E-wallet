@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 require_once "DBconnection.php";
 if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
@@ -119,3 +119,4 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
     header("Location: login.php");
     exit();
 }?>
+<?php

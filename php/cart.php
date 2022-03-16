@@ -4,8 +4,9 @@
     require_once 'component.php';
     require_once 'createDB.php';
     require_once '../DBconnection.php';
-    
-    $balance = $_SESSION['balance'];
+if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
+
+$balance = $_SESSION['balance'];
     $paymentError = false ;
     $db = new CreateDB('ProductDB','producttb');
 
@@ -104,7 +105,8 @@
                                     <div>
                                         Invalid operation: Not Enough Balance
                                     </div>
-                                </div></br>";
+                                </div>
+                                </br>";
                             }
                             ?>
                             <form action="cart.php" method="post">
@@ -116,7 +118,13 @@
             </div>
         </div>
     </div>
-    
     <script src="../assets/bootstrap.bundle.js"></script>
 </body>
 </html>
+
+<?php
+}else{
+    header("Location: ../login.php");
+    exit();
+}
+?>
